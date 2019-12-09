@@ -8,10 +8,10 @@ if (typeof sheet === 'undefined') {
   parentPort.postMessage({ error: true, dom: new JSDOM('<table><tr color="red"><td style="width: 100%; max-width: 100%;">このバージョンではまだ存在しないor削除されたシートです</td></tr></table>').serialize()});
 }
 else if (typeof sheet['!ref'] === 'undefined') {
-  parentPort.postMessage({ error: true, dom: new JSDOM(`<table><tr color="red"><td style="width: 100%; max-width: 100%;">設定が存在しないシートです。</td><tr></table>`).serialize()});
+  parentPort.postMessage({ error: true, dom: new JSDOM(`<table><tr color="red"><td style="width: 100%; max-width: 100%;">設定が存在しないシートです。</td></tr></table>`).serialize()});
 }
 else if (5000 < Object.keys(sheet).length) {
-  parentPort.postMessage({ error: true, dom: new JSDOM(`<table><tr color="red"><td style="width: 100%; max-width: 100%;">行数・列数が多すぎですexcelの作り方を見直してください。このシートのセル範囲「${sheet['!ref']}」</td><tr></table>`).serialize()});
+  parentPort.postMessage({ error: true, dom: new JSDOM(`<table><tr color="red"><td style="width: 100%; max-width: 100%;">行数・列数が多すぎですexcelの作り方を見直してください。このシートのセル範囲「${sheet['!ref']}」</td></tr></table>`).serialize()});
 }
 else {
   const dom = new JSDOM(XLSX.utils.sheet_to_html(sheet));
@@ -23,11 +23,12 @@ else {
       const e = sheet[`!rows`][i];
       if (e != null) {
         const targetRow = targetRows[i];
-        if (typeof targetRow === 'undefined') return;
-        const height = `${e.hpx}px`;
-        targetRow.style.minHeight = height;
-        targetRow.style.maxHeight = height;
-        targetRow.style.height = height;
+        if (typeof targetRow !== 'undefined') {
+          const height = `${e.hpx}px`;
+          targetRow.style.minHeight = height;
+          targetRow.style.maxHeight = height;
+          targetRow.style.height = height;
+        }
       }
     };
   }
