@@ -1,0 +1,20 @@
+{
+  "name": "excel-diff-html",
+  "version": "0.0.1",
+  "description": "output excel diff to html.",
+  "main": "src/index.js",
+  "dependencies": {
+    "deep-object-diff": "^1.1.0",
+    "jsdom": "^15.2.1",
+    "xlsx": "^0.15.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lil-Azurite/excel-diff-html.git"
+  },
+  "author": "azurite",
+  "bugs": {
+    "url": "https://github.com/Lil-Azurite/excel-diff-html/issues"
+  },
+  "homepage": "https://github.com/Lil-Azurite/excel-diff-html#readme"
+}
