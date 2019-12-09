@@ -42,7 +42,9 @@
         margin: 0px;
     ">
   <div id="sheet-list" style="
-        min-height: 40px;
+        min-height: 48px;
+        max-height: 48px;
+        height: 48px;
         width: 100%;
         white-space: nowrap;
         overflow-x: scroll;
@@ -51,15 +53,16 @@
   </div>
   <div id="old-table" style="
         overflow-y: scroll;
-        height: calc(50% - 38px);
+        height: calc(50% - 43px);
     ">
   </div>
   <p style="
         border: solid 2px #2d2d2d75;
+        margin: 16px 0px 16px 0px;
     "></p>
   <div id="new-table" style="
         overflow-y: scroll;
-        height: calc(50% - 38px);
+        height: calc(50% - 43px);
     ">
   </div>
 </body>
@@ -71,24 +74,28 @@
 
   const oldTableEventListener = () => {
     newTable.removeEventListener('scroll', newTableEventListener);
-    if (newTable.scrollTop !== oldTable.scrollTop) {
-      newTable.scrollTop = oldTable.scrollTop;
-    }
-    else if (oldTable.scrollLeft !== newTable.scrollLeft) {
-      newTable.scrollLeft = oldTable.scrollLeft;
-    }
-    newTable.addEventListener('scroll', newTableEventListener);
+    requestAnimationFrame(() => {
+      if (newTable.scrollTop !== oldTable.scrollTop) {
+        newTable.scrollTop = oldTable.scrollTop;
+      }
+      else if (oldTable.scrollLeft !== newTable.scrollLeft) {
+        newTable.scrollLeft = oldTable.scrollLeft;
+      }
+      newTable.addEventListener('scroll', newTableEventListener);
+    })
   };
 
   const newTableEventListener = () => {
     oldTable.removeEventListener('scroll', oldTableEventListener);
-    if (oldTable.scrollTop !== newTable.scrollTop) {
-      oldTable.scrollTop = newTable.scrollTop;
-    }
-    else if (oldTable.scrollLeft !== newTable.scrollLeft) {
-      oldTable.scrollLeft = newTable.scrollLeft;
-    }
-    oldTable.addEventListener('scroll', oldTableEventListener);
+    requestAnimationFrame(() => {
+      if (oldTable.scrollTop !== newTable.scrollTop) {
+        oldTable.scrollTop = newTable.scrollTop;
+      }
+      else if (oldTable.scrollLeft !== newTable.scrollLeft) {
+        oldTable.scrollLeft = newTable.scrollLeft;
+      }
+      oldTable.addEventListener('scroll', oldTableEventListener);
+    });
   };
 
   oldTable.addEventListener('scroll', oldTableEventListener);
