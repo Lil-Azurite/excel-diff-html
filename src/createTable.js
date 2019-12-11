@@ -14,7 +14,7 @@ else {
   const [_s, _e]= sheet['!ref'].split(':');
   const d_s = XLSX.utils.decode_cell(_s);
   const d_e = XLSX.utils.decode_cell(_e);
-  if (5000 < Object.keys(sheet).length || 1000 < d_e.c - d_s.c, 1000 < d_e.c - d_s.c) {
+  if (5000 < Object.keys(sheet).length || 1000 < d_e.c - d_s.c || 1000 < d_e.c - d_s.c) {
     parentPort.postMessage({ error: true, dom: new JSDOM(`<table><tr color="red"><td style="width: 100%; max-width: 100%;">行数・列数が多すぎですexcelの作り方を見直してください。このシートのセル範囲「${sheet['!ref']}」</td></tr></table>`).serialize()});
   }
   else {
