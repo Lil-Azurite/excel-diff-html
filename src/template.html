@@ -1,47 +1,45 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Excel Simple Diff</title>
+    <style media="screen" type="text/css">
+      table {
+        table-layout: fixed;
+        border: solid 1px gray;
+        border-collapse: collapse;
+      }
 
-<head>
-  <meta charset="utf-8">
-  <title>Excel Simple Diff</title>
-  <style media="screen" type="text/css">
-    table {
-      table-layout: fixed;
-      border: solid 1px gray;
-      border-collapse: collapse;
-    }
+      td {
+        border: solid 1px gray;
+        box-sizing: border-box;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 72px;
+        min-width: 72px;
+        max-width: 72px;
+      }
 
-    td {
-      border: solid 1px gray;
-      box-sizing: border-box;
-      overflow: hidden;
-      white-space: nowrap;
-      width: 72px;
-      min-width: 72px;
-      max-width: 72px;
-    }
+      tr {
+        height: 18px;
+        min-height: 18px;
+        max-height: 18px;
+      }
 
-    tr {
-      height: 18px;
-      min-height: 18px;
-      max-height: 18px;
-    }
+      .sheet-name {
+        display: inline-block;
+        border: solid 0.5px gray;
+        padding: 3px;
+        text-align: center;
+        cursor: pointer;
+      }
+    </style>
+  </head>
 
-    .sheet-name {
-      display: inline-block;
-      border: solid 0.5px gray;
-      padding: 3px;
-      text-align: center;
-      cursor: pointer;
-    }
-  </style>
-</head>
-
-<body style="
-        height: 100vh;
-        margin: 0px;
-    ">
-  <div id="sheet-list" style="
+  <body style="height: 100vh; margin: 0px">
+    <div
+      id="sheet-list"
+      style="
         min-height: 48px;
         max-height: 48px;
         height: 48px;
@@ -49,80 +47,79 @@
         white-space: nowrap;
         overflow-x: scroll;
         overflow-y: hidden;
-    ">
-  </div>
-  <div id="old-table" style="
-        overflow-y: scroll;
-        height: calc(50% - 43px);
-    ">
-  </div>
-  <p style="
-        border: solid 2px #2d2d2d75;
-        margin: 16px 0px 16px 0px;
-    "></p>
-  <div id="new-table" style="
-        overflow-y: scroll;
-        height: calc(50% - 43px);
-    ">
-  </div>
-</body>
+      "
+    ></div>
+    <div
+      id="old-table"
+      style="overflow-y: scroll; height: calc(50% - 43px)"
+    ></div>
+    <p style="border: solid 2px #2d2d2d75; margin: 16px 0px 16px 0px"></p>
+    <div
+      id="new-table"
+      style="overflow-y: scroll; height: calc(50% - 43px)"
+    ></div>
+  </body>
 
-<script>
+  <script>
+    const oldTable = document.getElementById("old-table");
+    const newTable = document.getElementById("new-table");
 
-  const oldTable = document.getElementById('old-table');
-  const newTable = document.getElementById('new-table');
-
-  const oldTableEventListener = () => {
-    newTable.removeEventListener('scroll', newTableEventListener);
-    requestAnimationFrame(() => {
-      if (newTable.scrollTop !== oldTable.scrollTop) {
-        newTable.scrollTop = oldTable.scrollTop;
-      }
-      else if (oldTable.scrollLeft !== newTable.scrollLeft) {
-        newTable.scrollLeft = oldTable.scrollLeft;
-      }
-      newTable.addEventListener('scroll', newTableEventListener);
-    })
-  };
-
-  const newTableEventListener = () => {
-    oldTable.removeEventListener('scroll', oldTableEventListener);
-    requestAnimationFrame(() => {
-      if (oldTable.scrollTop !== newTable.scrollTop) {
-        oldTable.scrollTop = newTable.scrollTop;
-      }
-      else if (oldTable.scrollLeft !== newTable.scrollLeft) {
-        oldTable.scrollLeft = newTable.scrollLeft;
-      }
-      oldTable.addEventListener('scroll', oldTableEventListener);
-    });
-  };
-
-  oldTable.addEventListener('scroll', oldTableEventListener);
-  newTable.addEventListener('scroll', newTableEventListener);
-
-  const sheetNameList = document.getElementsByClassName('sheet-name');
-  for (let i = 0; i < sheetNameList.length; i++) {
-    const span = sheetNameList[i];
-    span.addEventListener('click', (e) => {
-      for (let j = 0; j < sheetNameList.length; j++) {
-        const s = sheetNameList[j];
-        if(s.id === `sheet-${i}`) {
-          s.style.color ='whitesmoke';
-          s.style.backgroundColor = 'gray';
-        } else {
-          s.style.color ='';
-          s.style.backgroundColor = '';
+    let oldTableScrollTimer = 2;
+    const oldTableEventListener = () => {
+      newTable.removeEventListener("scroll", newTableEventListener);
+      requestAnimationFrame(() => {
+        if (newTable.scrollTop !== oldTable.scrollTop) {
+          newTable.scrollTop = oldTable.scrollTop;
+        } else if (oldTable.scrollLeft !== newTable.scrollLeft) {
+          newTable.scrollLeft = oldTable.scrollLeft;
         }
-      };
-      const tableeList = document.getElementsByTagName('table');
-      for (let i = 0; i < tableeList.length; i++) {
-        tableeList[i].style.display = 'none';
-      };
-      document.getElementById(`old-table-${i}`).style.display = 'table';
-      document.getElementById(`new-table-${i}`).style.display = 'table';
-    });
-  }
-</script>
+        clearTimeout(oldTableScrollTimer);
+        oldTableScrollTimer = setTimeout(() => {
+          newTable.addEventListener("scroll", newTableEventListener);
+        }, 300);
+      });
+    };
 
+    let newTableScrollTimer = 0;
+    const newTableEventListener = () => {
+      oldTable.removeEventListener("scroll", oldTableEventListener);
+      requestAnimationFrame(() => {
+        if (oldTable.scrollTop !== newTable.scrollTop) {
+          oldTable.scrollTop = newTable.scrollTop;
+        } else if (oldTable.scrollLeft !== newTable.scrollLeft) {
+          oldTable.scrollLeft = newTable.scrollLeft;
+        }
+        clearTimeout(newTableScrollTimer);
+        newTableScrollTimer = setTimeout(() => {
+          oldTable.addEventListener("scroll", oldTableEventListener);
+        }, 300);
+      });
+    };
+
+    oldTable.addEventListener("scroll", oldTableEventListener);
+    newTable.addEventListener("scroll", newTableEventListener);
+
+    const sheetNameList = document.getElementsByClassName("sheet-name");
+    for (let i = 0; i < sheetNameList.length; i++) {
+      const span = sheetNameList[i];
+      span.addEventListener("click", (e) => {
+        for (let j = 0; j < sheetNameList.length; j++) {
+          const s = sheetNameList[j];
+          if (s.id === `sheet-${i}`) {
+            s.style.color = "whitesmoke";
+            s.style.backgroundColor = "gray";
+          } else {
+            s.style.color = "";
+            s.style.backgroundColor = "";
+          }
+        }
+        const tableeList = document.getElementsByTagName("table");
+        for (let i = 0; i < tableeList.length; i++) {
+          tableeList[i].style.display = "none";
+        }
+        document.getElementById(`old-table-${i}`).style.display = "table";
+        document.getElementById(`new-table-${i}`).style.display = "table";
+      });
+    }
+  </script>
 </html>

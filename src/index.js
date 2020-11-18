@@ -81,7 +81,7 @@ const writeDiffExcelhtml = async (oldExcelPath, newExcelPath, outputPath) => {
   });
 
   const templateDOM = new JSDOM(templateHtml);
-  const templateDocument = templateDOM.window.document;;
+  const templateDocument = templateDOM.window.document;
 
   const sheetNameArray = Object.keys(changeSheetNameList);
   const promiseArray = [];
@@ -92,7 +92,7 @@ const writeDiffExcelhtml = async (oldExcelPath, newExcelPath, outputPath) => {
         workerData: sheet
       });
       worker.on('message', (result) => {
-        resolve({error: result.error, dom: new JSDOM(result.dom)});
+        resolve({ error: result.error, dom: new JSDOM(result.dom) });
       });
       worker.on('exit', (code) => {
         if (code !== 0) reject(new Error());
@@ -107,7 +107,7 @@ const writeDiffExcelhtml = async (oldExcelPath, newExcelPath, outputPath) => {
   }
   const createTableResult = await Promise.all(promiseArray);
 
-  for(let index = 0; index < sheetNameArray.length; index++) {
+  for (let index = 0; index < sheetNameArray.length; index++) {
     const sheet = sheetNameArray[index];
     console.log('warite sheet ', sheet);
     const oldDomInfo = createTableResult[index * 2];
