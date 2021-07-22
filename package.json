@@ -6,7 +6,7 @@
   "dependencies": {
     "deep-object-diff": "^1.1.0",
     "jsdom": "^16.4.0",
-    "xlsx": "^0.16.8"
+    "xlsx": "^0.17.0"
   },
   "repository": {
     "type": "git",
